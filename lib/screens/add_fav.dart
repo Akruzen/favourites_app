@@ -35,6 +35,7 @@ class _AddFavState extends State<AddFav> {
         centerTitle: true,
         backgroundColor: Colors.pinkAccent,
       ),
+      backgroundColor: Colors.teal[50],
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -42,8 +43,11 @@ class _AddFavState extends State<AddFav> {
             children: [
               Card(
                 elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
                       const SizedBox(height: 10.0,),
@@ -59,6 +63,10 @@ class _AddFavState extends State<AddFav> {
                         decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.title, color: Colors.black87,),
                           label: Text("Title"),
+                          labelStyle: TextStyle(color: Colors.teal),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.amberAccent),
+                          ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.amberAccent),
                           ),
@@ -79,7 +87,7 @@ class _AddFavState extends State<AddFav> {
                         controller: descController,
                         enabled: false,
                         decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.title, color: Colors.black87,),
+                          prefixIcon: Icon(Icons.copy_rounded, color: Colors.black87,),
                           label: Text("Copied Text"),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.amberAccent, width: 0.0),
@@ -110,6 +118,7 @@ class _AddFavState extends State<AddFav> {
                             List<String> keysList = prefs.getStringList("keys") ?? [];
                             keysList.add(now.toString());
                             prefs.setStringList("keys", keysList);
+                            print("Key Saved: ${now.toString}");
                             print("Saved");
                             SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                           }
