@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:io' as io;
+import 'package:path/path.dart' as path;
 
 import '../functions/check_image.dart';
 import '../functions/custom_snackbar.dart';
+import '../functions/extension_list.dart';
 
 class ViewCard extends StatefulWidget {
 
@@ -23,17 +25,34 @@ class _ViewCardState extends State<ViewCard> {
 
   Widget showContent () {
     if (io.File(widget.desc).existsSync()) {
-      print("Image exists");
-      return Container(
-        height: 200.0,
-        width: 200.0,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.fill,
-              image: loadImage(widget.desc),
-            )
-        ),
-      );
+      if (getFileType(path.extension(widget.desc)) == "image") {
+        print("Image exists");
+        return Container(
+          height: 200.0,
+          width: 200.0,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: loadImage(widget.desc),
+              )
+          ),
+        );
+      }
+      else if (getFileType(path.extension(widget.desc)) == "video") {
+        return const Icon(Icons.video_file_rounded, size: 60.0, color: Colors.deepPurpleAccent,);
+      }
+      else if (getFileType(path.extension(widget.desc)) == "audio") {
+        return const Icon(Icons.audio_file_rounded, size: 60.0, color: Colors.amberAccent,);
+      }
+      else if (getFileType(path.extension(widget.desc)) == "pdf") {
+        return const Icon(Icons.picture_as_pdf_rounded, size: 60.0, color: Colors.redAccent,);
+      }
+      else if (getFileType(path.extension(widget.desc)) == "doc") {
+        return const Icon(Icons.description_rounded, size: 60.0, color: Colors.blueAccent,);
+      }
+      else if (getFileType(path.extension(widget.desc)) == "ppt") {
+        return Icon(Icons.slideshow_rounded, size: 60.0, color: Colors.red[200],);
+      }
     }
     return Text(widget.desc);
   }

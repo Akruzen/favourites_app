@@ -1,5 +1,6 @@
 import 'package:favourites_app/functions/check_image.dart';
 import 'package:favourites_app/functions/delete_card.dart';
+import 'package:favourites_app/functions/extension_list.dart';
 import 'package:favourites_app/main.dart';
 import 'package:favourites_app/screens/view_card.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:open_file/open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' as io;
+import 'package:path/path.dart' as path;
 
 import 'edit_card.dart';
 
@@ -15,16 +17,36 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
 
   Widget showContent () {
     if (io.File(description).existsSync()) {
-      print("Image exists");
-      return Container(
-        height: 80.0,
-        width: 80.0,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-              image: loadImage(description),
-            )
-        ),
-      );
+      if (getFileType(path.extension(description)) == "image") {
+        print("Image exists");
+        return Container(
+          height: 80.0,
+          width: 80.0,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                image: loadImage(description),
+              )
+          ),
+        );
+      }
+      else if (getFileType(path.extension(description)) == "video") {
+        return const Icon(Icons.video_file_rounded, size: 40.0, color: Colors.deepPurpleAccent,);
+      }
+      else if (getFileType(path.extension(description)) == "audio") {
+        return const Icon(Icons.audio_file_rounded, size: 40.0, color: Colors.amberAccent,);
+      }
+      else if (getFileType(path.extension(description)) == "pdf") {
+        return const Icon(Icons.picture_as_pdf_rounded, size: 40.0, color: Colors.redAccent,);
+      }
+      else if (getFileType(path.extension(description)) == "doc") {
+        return const Icon(Icons.description_rounded, size: 40.0, color: Colors.blueAccent,);
+      }
+      else if (getFileType(path.extension(description)) == "ppt") {
+        return Icon(Icons.slideshow_rounded, size: 40.0, color: Colors.red[200],);
+      }
+      else {
+        return const Icon(Icons.receipt_rounded, size: 40.0, color: Colors.indigoAccent,);
+      }
     }
     else if (description.contains("http://") || description.contains("https://")) {
       return const Icon(Icons.web_outlined, size: 40.0, color: Colors.pinkAccent,);
