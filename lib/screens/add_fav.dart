@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddFav extends StatefulWidget {
@@ -120,6 +121,7 @@ class _AddFavState extends State<AddFav> {
                             prefs.setStringList("keys", keysList);
                             print("Key Saved: ${now.toString}");
                             print("Saved");
+                            Fluttertoast.showToast(msg: "Saved!");
                             SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                           }
                         },

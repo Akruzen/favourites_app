@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../functions/custom_snackbar.dart';
 
 class ViewCard extends StatefulWidget {
 
@@ -45,7 +49,19 @@ class _ViewCardState extends State<ViewCard> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(widget.title),
+                      Row(
+                        children: [
+                          Text(widget.title, style: const TextStyle(color: Colors.black, fontSize: 20.0),),
+                          const Spacer(),
+                        ],
+                      ),
+                      const SizedBox(height: 15.0,),
+                      Row(
+                        children: [
+                          Text(widget.desc),
+                          const Spacer(),
+                        ],
+                      ),
                       const SizedBox(height: 30.0,),
                       ElevatedButton.icon(
                         style: ButtonStyle(
@@ -61,7 +77,11 @@ class _ViewCardState extends State<ViewCard> {
                           padding: EdgeInsets.symmetric(vertical: 17.0, horizontal: 10.0),
                           child: Text("Copy content to Clipboard"),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Clipboard.setData(ClipboardData(text: widget.desc));
+                          // Fluttertoast.showToast(msg: "Content copied!");
+                          showCustomSnackBar("Content copied to clipboard.", context);
+                        },
                       )
                     ],
                   ),

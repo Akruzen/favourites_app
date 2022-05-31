@@ -1,6 +1,6 @@
 import 'package:favourites_app/functions/check_image.dart';
 import 'package:favourites_app/functions/delete_card.dart';
-import 'package:favourites_app/screens/main.dart';
+import 'package:favourites_app/main.dart';
 import 'package:favourites_app/screens/view_card.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
@@ -42,6 +42,16 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
     }
     else {
       return Text(description, maxLines: 1, overflow: TextOverflow.ellipsis,);
+    }
+  }
+
+  Widget checkAndLoadTitle () {
+    if (text.length > 10) {
+      String newTitle = "...${text.substring(text.length - 10)}";
+      return Text(newTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.black, fontSize: 25.0, fontFamily: "Montserrat"),);
+    }
+    else {
+      return Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.black, fontSize: 25.0, fontFamily: "Montserrat"));
     }
   }
 
