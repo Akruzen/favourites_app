@@ -1,3 +1,4 @@
+import 'package:favourites_app/screens/main.dart';
 import 'package:flutter/material.dart';
 
 import 'edit_card.dart';
@@ -6,7 +7,7 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
   return GestureDetector(
     onLongPress: () {
       Route route = MaterialPageRoute(builder: (context) => EditCard(oldTitle: text, date: date, desc: description,));
-      Navigator.push(context, route);
+      Navigator.push(context, route).then((_) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage())));
     },
     child: Card(
       elevation: 5.0,

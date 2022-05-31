@@ -1,4 +1,4 @@
-import 'package:favourites_app/set_new_title.dart';
+import 'package:favourites_app/functions/set_new_title.dart';
 import 'package:flutter/material.dart';
 
 class EditCard extends StatefulWidget {

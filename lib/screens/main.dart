@@ -64,31 +64,39 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     showCards();
-    /*// For sharing images coming from outside the app while the app is in the memory
+    // For sharing images coming from outside the app while the app is in the memory
     _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
         .listen((List<SharedMediaFile> value) {
-      setState(() {
-        _sharedFiles = value;
-        print("Shared:" + (_sharedFiles?.map((f) => f.path).join(",") ?? ""));
-      });
+      _sharedFiles = value;
+      String path = _sharedFiles?.map((f) => f.path).join(",") ?? "";
+      print("Shared Image in memory: ${_sharedFiles?.map((f) => f.path).join(",") ?? ""}");
+      print("Printing to String when app in memory: $path");
+      if (value.isNotEmpty) {
+        Route route = MaterialPageRoute(builder: (context) => AddFav(data: path));
+        Navigator.pushReplacement(context, route);
+      }
     }, onError: (err) {
       print("getIntentDataStream error: $err");
     });
 
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
-      setState(() {
-        _sharedFiles = value;
-        print("Shared:" + (_sharedFiles?.map((f) => f.path).join(",") ?? ""));
-      });
-    });*/
+      _sharedFiles = value;
+      String path = _sharedFiles?.map((f) => f.path).join(",") ?? "";
+      print("Shared Image app is closed: ${_sharedFiles?.map((f) => f.path).join(",") ?? ""}");
+      print("Printing to String when app closed: $path");
+      if (value.isNotEmpty) {
+        Route route = MaterialPageRoute(builder: (context) => AddFav(data: path));
+        Navigator.pushReplacement(context, route);
+      }
+    });
 
     /******************************************************************************************/
 
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
     _intentDataStreamSubscription =
         ReceiveSharingIntent.getTextStream().listen((String value) {
-          if (value.isNotEmpty || value != "") {
+          if (value.isNotEmpty && value != "") {
             var now = DateTime.now();
             setState(() {
               data = value;
@@ -157,18 +165,35 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.clear();
-          setState(() {
-            storedCards.clear();
-            showCustomSnackBar("Done. All Lists cleared");
-          });
-        },
-        label: const Text("Clear All", style: TextStyle(color: Colors.white),),
-        icon: const Icon(Icons.clear_rounded, color: Colors.white,),
-        backgroundColor: Colors.pinkAccent,
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            onPressed: () {
+              setState((){
+                showCards();
+              });
+            },
+            label: const Text("Refresh Page", style: TextStyle(color: Colors.white),),
+            icon: const Icon(Icons.refresh_rounded, color: Colors.white,),
+            backgroundColor: Colors.indigoAccent,
+          ),
+          const SizedBox(height: 20.0,),
+          FloatingActionButton.extended(
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.clear();
+              setState(() {
+                storedCards.clear();
+                showCustomSnackBar("Done. All Lists cleared");
+              });
+            },
+            heroTag: "ClearAll",
+            label: const Text("Clear All", style: TextStyle(color: Colors.white),),
+            icon: const Icon(Icons.clear_rounded, color: Colors.white,),
+            backgroundColor: Colors.pinkAccent,
+          ),
+        ],
       ),
       backgroundColor: Colors.teal[50],
       body: SingleChildScrollView(
