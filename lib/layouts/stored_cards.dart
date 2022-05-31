@@ -1,5 +1,7 @@
 import 'package:favourites_app/functions/check_image.dart';
+import 'package:favourites_app/functions/delete_card.dart';
 import 'package:favourites_app/screens/main.dart';
+import 'package:favourites_app/screens/view_card.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,18 +25,24 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
         ),
       );
     }
+    else if (description.contains("http://") || description.contains("https://")) {
+      return const Icon(Icons.web_outlined, size: 50.0, color: Colors.pinkAccent,);
+    }
     else {
       print("Image doesn't exist");
-      return const Icon(Icons.text_fields_rounded);
+      return const Icon(Icons.text_fields_rounded, size: 50.0, color: Colors.indigoAccent,);
       // return Text(description);
     }
   }
 
   Widget checkAndLoadText () {
-    if (!io.File(description).existsSync()) {
+    if (description.length > 15) {
+      String newDesc = "...${description.substring(description.length - 15)}";
+      return Text(newDesc, maxLines: 1, overflow: TextOverflow.ellipsis,);
+    }
+    else {
       return Text(description, maxLines: 1, overflow: TextOverflow.ellipsis,);
     }
-    return const Text("No Description");
   }
 
   return GestureDetector(
@@ -67,7 +75,10 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
             mainAxisSize: MainAxisSize.min,
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCard(title: text, date: date, desc: description)));
+                },
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50.0),
@@ -103,6 +114,30 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
                         Icon(Icons.edit_rounded, color: Colors.orange,),
                         SizedBox(width: 15.0,),
                         Text("Edit", style: TextStyle(color: Colors.black, fontSize: 15.0),),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 5.0,),
+              TextButton(
+                onPressed: () {
+                  deleteCard(date);
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  elevation: 5.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Row(
+                      children: const [
+                        Icon(Icons.delete_forever_rounded, color: Colors.orange,),
+                        SizedBox(width: 15.0,),
+                        Text("Delete", style: TextStyle(color: Colors.black, fontSize: 15.0),),
                       ],
                     ),
                   ),

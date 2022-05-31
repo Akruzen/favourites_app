@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton.extended(
+          /*FloatingActionButton.extended(
             onPressed: () {
               setState((){
                 showCards();
@@ -178,7 +178,7 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(Icons.refresh_rounded, color: Colors.white,),
             backgroundColor: Colors.indigoAccent,
           ),
-          const SizedBox(height: 20.0,),
+          const SizedBox(height: 20.0,),*/
           FloatingActionButton.extended(
             onPressed: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
