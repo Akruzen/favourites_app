@@ -3,6 +3,7 @@ import 'package:favourites_app/functions/delete_card.dart';
 import 'package:favourites_app/main.dart';
 import 'package:favourites_app/screens/view_card.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:open_file/open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' as io;
@@ -26,11 +27,11 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
       );
     }
     else if (description.contains("http://") || description.contains("https://")) {
-      return const Icon(Icons.web_outlined, size: 50.0, color: Colors.pinkAccent,);
+      return const Icon(Icons.web_outlined, size: 40.0, color: Colors.pinkAccent,);
     }
     else {
       print("Image doesn't exist");
-      return const Icon(Icons.text_fields_rounded, size: 50.0, color: Colors.indigoAccent,);
+      return const Icon(Icons.text_fields_rounded, size: 40.0, color: Colors.indigoAccent,);
       // return Text(description);
     }
   }
@@ -48,10 +49,10 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
   Widget checkAndLoadTitle () {
     if (text.length > 10) {
       String newTitle = "...${text.substring(text.length - 10)}";
-      return Text(newTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.black, fontSize: 25.0, fontFamily: "Montserrat"),);
+      return Text(newTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.titilliumWeb(textStyle: const TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: "Montserrat")),);
     }
     else {
-      return Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.black, fontSize: 25.0, fontFamily: "Montserrat"));
+      return Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.titilliumWeb(textStyle: const TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: "Montserrat")),);
     }
   }
 
@@ -164,7 +165,7 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
         child: Row(
           children: [
             Column(
@@ -175,7 +176,7 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
             const Spacer(),
             Column(
               children: [
-                Text(text, style: const TextStyle(color: Colors.black, fontSize: 25.0), maxLines: 1,),
+                checkAndLoadTitle(),
                 const SizedBox(height: 10.0,),
                 checkAndLoadText(),
                 const SizedBox(height: 5.0,),

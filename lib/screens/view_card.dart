@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'dart:io' as io;
 
+import '../functions/check_image.dart';
 import '../functions/custom_snackbar.dart';
 
 class ViewCard extends StatefulWidget {
@@ -17,6 +20,24 @@ class ViewCard extends StatefulWidget {
 }
 
 class _ViewCardState extends State<ViewCard> {
+
+  Widget showContent () {
+    if (io.File(widget.desc).existsSync()) {
+      print("Image exists");
+      return Container(
+        height: 200.0,
+        width: 200.0,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.fill,
+              image: loadImage(widget.desc),
+            )
+        ),
+      );
+    }
+    return Text(widget.desc);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,14 +72,21 @@ class _ViewCardState extends State<ViewCard> {
                     children: [
                       Row(
                         children: [
-                          Text(widget.title, style: const TextStyle(color: Colors.black, fontSize: 20.0),),
+                          Text(widget.title, style: GoogleFonts.titilliumWeb(textStyle: const TextStyle(color: Colors.black, fontSize: 20.0),)),
+                          const Spacer(),
+                        ],
+                      ),
+                      const SizedBox(height: 5.0,),
+                      Row(
+                        children: [
+                          Text("Created on: ${widget.date.substring(0, 10)}, at ${widget.date.substring(11, 16)}", style: const TextStyle(color: Colors.blueGrey, fontSize: 15.0),),
                           const Spacer(),
                         ],
                       ),
                       const SizedBox(height: 15.0,),
                       Row(
                         children: [
-                          Text(widget.desc),
+                          showContent(),
                           const Spacer(),
                         ],
                       ),

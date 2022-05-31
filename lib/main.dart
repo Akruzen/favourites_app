@@ -4,12 +4,15 @@ import 'package:favourites_app/layouts/edit_card.dart';
 import 'package:favourites_app/layouts/stored_cards.dart';
 import 'package:favourites_app/screens/add_fav.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(const MaterialApp(
-    home: HomePage(),
+  runApp(MaterialApp(
+    theme: ThemeData(fontFamily: "Montserrat"),
+    home: const HomePage(),
     debugShowCheckedModeBanner: false,
   ));
 }
@@ -141,7 +144,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.indigoAccent,
         title: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50.0),
@@ -157,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                 const Spacer(),
                 const Icon(Icons.favorite_rounded, color: Colors.redAccent, size: 30.0),
                 const SizedBox(width: 20.0,),
-                const Text("FavoSave", style: TextStyle(fontSize: 20.0),),
+                Text("FavoSave", style: GoogleFonts.ubuntu(textStyle: const TextStyle(fontSize: 25.0)),),
                 const Spacer(),
                 Icon(Icons.circle, color: Colors.blue[200], size: 25.0,)
               ],
@@ -165,33 +168,39 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+      floatingActionButton: SpeedDial(
+        backgroundColor: Colors.orange,
+        icon: Icons.arrow_upward_rounded,
+        activeIcon: Icons.arrow_downward_rounded,
+        spaceBetweenChildren: 10.0,
+        overlayColor: Colors.indigoAccent,
+        useRotationAnimation: true,
         children: [
-          /*FloatingActionButton.extended(
-            onPressed: () {
-              setState((){
-                showCards();
-              });
-            },
-            label: const Text("Refresh Page", style: TextStyle(color: Colors.white),),
-            icon: const Icon(Icons.refresh_rounded, color: Colors.white,),
-            backgroundColor: Colors.indigoAccent,
+          SpeedDialChild(
+            labelWidget: const Text("Refresh Page", style: TextStyle(color: Colors.black),),
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+              },
+              backgroundColor: Colors.teal,
+              child: const Icon(Icons.refresh_rounded, color: Colors.white,),
+            ),
           ),
-          const SizedBox(height: 20.0,),*/
-          FloatingActionButton.extended(
-            onPressed: () async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.clear();
-              setState(() {
-                storedCards.clear();
-                showCustomSnackBar("Done. All Lists cleared");
-              });
-            },
-            heroTag: "ClearAll",
-            label: const Text("Clear All", style: TextStyle(color: Colors.white),),
-            icon: const Icon(Icons.clear_rounded, color: Colors.white,),
-            backgroundColor: Colors.pinkAccent,
+          SpeedDialChild(
+            labelWidget: const Text("Clear All", style: TextStyle(color: Colors.black),),
+            child: FloatingActionButton(
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.clear();
+                setState(() {
+                  storedCards.clear();
+                  showCustomSnackBar("Done. All Lists cleared");
+                });
+              },
+              heroTag: "ClearAll",
+              backgroundColor: Colors.pinkAccent,
+              child: const Icon(Icons.clear_rounded, color: Colors.white,),
+            ),
           ),
         ],
       ),
