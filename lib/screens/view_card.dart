@@ -22,6 +22,34 @@ class ViewCard extends StatefulWidget {
 }
 
 class _ViewCardState extends State<ViewCard> {
+  
+  Widget getIconWithDesc (IconData iconData, Color iconColor) {
+    TextEditingController controller = TextEditingController();
+    controller.text = widget.desc;
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Column(
+        children: [
+          Icon(iconData, size: 60.0, color: iconColor),
+          const SizedBox(height: 20.0,),
+          SizedBox(
+            width: MediaQuery.of(context).size.width - 75,
+            child: TextField(
+              controller: controller,
+              enabled: false,
+              maxLines: null,
+              decoration: const InputDecoration(
+                label: Text("Your Text"),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.amberAccent, width: 0.0),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget showContent () {
     if (io.File(widget.desc).existsSync()) {
@@ -39,22 +67,28 @@ class _ViewCardState extends State<ViewCard> {
         );
       }
       else if (getFileType(path.extension(widget.desc)) == "video") {
-        return const Icon(Icons.video_file_rounded, size: 60.0, color: Colors.deepPurpleAccent,);
+        return getIconWithDesc(Icons.video_file_rounded, Colors.deepPurpleAccent);
       }
       else if (getFileType(path.extension(widget.desc)) == "audio") {
-        return const Icon(Icons.audio_file_rounded, size: 60.0, color: Colors.amberAccent,);
+        return getIconWithDesc(Icons.audio_file_rounded, Colors.amberAccent,);
       }
       else if (getFileType(path.extension(widget.desc)) == "pdf") {
-        return const Icon(Icons.picture_as_pdf_rounded, size: 60.0, color: Colors.redAccent,);
+        return getIconWithDesc(Icons.picture_as_pdf_rounded, Colors.redAccent,);
       }
       else if (getFileType(path.extension(widget.desc)) == "doc") {
-        return const Icon(Icons.description_rounded, size: 60.0, color: Colors.blueAccent,);
+        return getIconWithDesc(Icons.description_rounded, Colors.blueAccent,);
       }
       else if (getFileType(path.extension(widget.desc)) == "ppt") {
-        return Icon(Icons.slideshow_rounded, size: 60.0, color: Colors.red[200],);
+        return getIconWithDesc(Icons.slideshow_rounded, Colors.red,);
+      }
+      else {
+        return getIconWithDesc(Icons.receipt_rounded, Colors.deepPurpleAccent,);
       }
     }
-    return Text(widget.desc);
+    else if (widget.desc.contains("http://") || widget.desc.contains("https://")) {
+      return getIconWithDesc(Icons.web_rounded, Colors.pinkAccent);
+    }
+    return getIconWithDesc(Icons.text_fields_rounded, Colors.indigoAccent,);
   }
 
   @override
@@ -98,7 +132,7 @@ class _ViewCardState extends State<ViewCard> {
                       const SizedBox(height: 5.0,),
                       Row(
                         children: [
-                          Text("Created on: ${widget.date.substring(0, 10)}, at ${widget.date.substring(11, 16)}", style: const TextStyle(color: Colors.blueGrey, fontSize: 15.0),),
+                          Text("Created on ${widget.date.substring(0, 10)}, at ${widget.date.substring(11, 16)}", style: const TextStyle(color: Colors.blueGrey, fontSize: 15.0),),
                           const Spacer(),
                         ],
                       ),
@@ -106,7 +140,6 @@ class _ViewCardState extends State<ViewCard> {
                       Row(
                         children: [
                           showContent(),
-                          const Spacer(),
                         ],
                       ),
                       const SizedBox(height: 30.0,),

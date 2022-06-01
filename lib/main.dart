@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                 const Spacer(),
                 const Icon(Icons.favorite_rounded, color: Colors.redAccent, size: 30.0),
                 const SizedBox(width: 20.0,),
-                Text("FavoSave", style: GoogleFonts.ubuntu(textStyle: const TextStyle(fontSize: 25.0)),),
+                Text("FavoSave", style: GoogleFonts.ubuntu(textStyle: const TextStyle(fontSize: 20.0)),),
                 const Spacer(),
                 Icon(Icons.circle, color: Colors.blue[200], size: 25.0,)
               ],
@@ -169,7 +169,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: SpeedDial(
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.indigoAccent,
         icon: Icons.arrow_upward_rounded,
         activeIcon: Icons.arrow_downward_rounded,
         spaceBetweenChildren: 10.0,
@@ -177,7 +177,18 @@ class _HomePageState extends State<HomePage> {
         useRotationAnimation: true,
         children: [
           SpeedDialChild(
-            labelWidget: const Text("Refresh Page", style: TextStyle(color: Colors.black),),
+            labelWidget: Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Text(
+                  "Refresh Page", style: TextStyle(color: Colors.black),
+                ),
+              )
+            ),
             child: FloatingActionButton(
               onPressed: () {
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
@@ -187,7 +198,18 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SpeedDialChild(
-            labelWidget: const Text("Clear All", style: TextStyle(color: Colors.black),),
+            labelWidget: Card(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text(
+                    "Clear All", style: TextStyle(color: Colors.black),
+                  ),
+                )
+            ),
             child: FloatingActionButton(
               onPressed: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();

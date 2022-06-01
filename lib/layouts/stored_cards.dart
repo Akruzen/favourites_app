@@ -30,30 +30,30 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
         );
       }
       else if (getFileType(path.extension(description)) == "video") {
-        return const Icon(Icons.video_file_rounded, size: 40.0, color: Colors.deepPurpleAccent,);
+        return const Icon(Icons.video_file_rounded, size: 30.0, color: Colors.deepPurpleAccent,);
       }
       else if (getFileType(path.extension(description)) == "audio") {
-        return const Icon(Icons.audio_file_rounded, size: 40.0, color: Colors.amberAccent,);
+        return const Icon(Icons.audio_file_rounded, size: 30.0, color: Colors.amberAccent,);
       }
       else if (getFileType(path.extension(description)) == "pdf") {
-        return const Icon(Icons.picture_as_pdf_rounded, size: 40.0, color: Colors.redAccent,);
+        return const Icon(Icons.picture_as_pdf_rounded, size: 30.0, color: Colors.redAccent,);
       }
       else if (getFileType(path.extension(description)) == "doc") {
-        return const Icon(Icons.description_rounded, size: 40.0, color: Colors.blueAccent,);
+        return const Icon(Icons.description_rounded, size: 30.0, color: Colors.blueAccent,);
       }
       else if (getFileType(path.extension(description)) == "ppt") {
-        return Icon(Icons.slideshow_rounded, size: 40.0, color: Colors.red[200],);
+        return Icon(Icons.slideshow_rounded, size: 30.0, color: Colors.red[200],);
       }
       else {
-        return const Icon(Icons.receipt_rounded, size: 40.0, color: Colors.indigoAccent,);
+        return const Icon(Icons.receipt_rounded, size: 30.0, color: Colors.indigoAccent,);
       }
     }
     else if (description.contains("http://") || description.contains("https://")) {
-      return const Icon(Icons.web_outlined, size: 40.0, color: Colors.pinkAccent,);
+      return const Icon(Icons.web_outlined, size: 30.0, color: Colors.pinkAccent,);
     }
     else {
       print("Image doesn't exist");
-      return const Icon(Icons.text_fields_rounded, size: 40.0, color: Colors.indigoAccent,);
+      return const Icon(Icons.text_fields_rounded, size: 30.0, color: Colors.indigoAccent,);
       // return Text(description);
     }
   }
@@ -69,13 +69,109 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
   }
 
   Widget checkAndLoadTitle () {
-    if (text.length > 10) {
-      String newTitle = "...${text.substring(text.length - 10)}";
-      return Text(newTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.titilliumWeb(textStyle: const TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: "Montserrat")),);
+    if (text.length > 20) {
+      String newTitle = "...${text.substring(text.length - 20)}";
+      return Text(newTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.titilliumWeb(textStyle: const TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: "Montserrat")),);
     }
     else {
-      return Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.titilliumWeb(textStyle: const TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: "Montserrat")),);
+      return Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.titilliumWeb(textStyle: const TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: "Montserrat")),);
     }
+  }
+
+  Future showLongPressDialog () {
+    return showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Choose an action: "),
+          contentPadding: const EdgeInsets.all(10.0),
+          backgroundColor: Colors.teal[50],
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 15.0,),
+              TextButton(
+                style: ButtonStyle(
+                  elevation: MaterialStateProperty.all(2.0),
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                       borderRadius: BorderRadius.circular(50.0),
+                    )
+                  )
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCard(title: text, date: date, desc: description)));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.visibility_rounded, color: Colors.teal,),
+                      SizedBox(width: 15.0,),
+                      Text("View", style: TextStyle(color: Colors.black, fontSize: 15.0),),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15.0,),
+              TextButton(
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(2.0),
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        )
+                    )
+                ),
+                onPressed: () {
+                  Route route = MaterialPageRoute(builder: (context) => EditCard(oldTitle: text, date: date, desc: description,));
+                  Navigator.push(context, route).then((_) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage())));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.edit_rounded, color: Colors.orange,),
+                      SizedBox(width: 15.0,),
+                      Text("Edit", style: TextStyle(color: Colors.black, fontSize: 15.0),),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15.0,),
+              TextButton(
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(2.0),
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        )
+                    )
+                ),
+                onPressed: () {
+                  deleteCard(date);
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.delete_forever_rounded, color: Colors.redAccent,),
+                      SizedBox(width: 15.0,),
+                      Text("Delete", style: TextStyle(color: Colors.black, fontSize: 15.0),),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15.0,),
+            ],
+          ),
+        )
+    );
   }
 
   return GestureDetector(
@@ -98,88 +194,7 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
       }
     },
     onLongPress: () {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text("Choose an action: "),
-          contentPadding: const EdgeInsets.all(10.0),
-          backgroundColor: Colors.teal[50],
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCard(title: text, date: date, desc: description)));
-                },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
-                  elevation: 5.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.visibility_rounded, color: Colors.orange,),
-                        SizedBox(width: 15.0,),
-                        Text("View", style: TextStyle(color: Colors.black, fontSize: 15.0),),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5.0,),
-              TextButton(
-                onPressed: () {
-                  Route route = MaterialPageRoute(builder: (context) => EditCard(oldTitle: text, date: date, desc: description,));
-                  Navigator.push(context, route).then((_) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage())));
-                },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
-                  elevation: 5.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.edit_rounded, color: Colors.orange,),
-                        SizedBox(width: 15.0,),
-                        Text("Edit", style: TextStyle(color: Colors.black, fontSize: 15.0),),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5.0,),
-              TextButton(
-                onPressed: () {
-                  deleteCard(date);
-                  Navigator.pop(context);
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
-                },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
-                  elevation: 5.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.delete_forever_rounded, color: Colors.orange,),
-                        SizedBox(width: 15.0,),
-                        Text("Delete", style: TextStyle(color: Colors.black, fontSize: 15.0),),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        )
-      );
+      showLongPressDialog();
     },
     child: Card(
       elevation: 5.0,
@@ -187,7 +202,7 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
         child: Row(
           children: [
             Column(
@@ -195,15 +210,22 @@ Widget getStoredCard(String text, String description, String date, BuildContext 
                 showContent(),
               ],
             ),
-            const Spacer(),
+            const SizedBox(width: 25.0,),
             Column(
               children: [
                 checkAndLoadTitle(),
-                const SizedBox(height: 10.0,),
-                checkAndLoadText(),
-                const SizedBox(height: 5.0,),
-                Text("Created on: $date", style: const TextStyle(color: Colors.grey, fontSize: 10.0),),
+                //const SizedBox(height: 10.0,),
+                // checkAndLoadText(),
+                //const SizedBox(height: 5.0,),
+                //Text("Created on: ${date.substring(0, 11)}", style: const TextStyle(color: Colors.grey, fontSize: 10.0),),
               ],
+            ),
+            const Spacer(),
+            IconButton(
+              onPressed: () {
+                showLongPressDialog();
+              },
+              icon: const Icon(Icons.more_vert_rounded),
             ),
           ],
         ),

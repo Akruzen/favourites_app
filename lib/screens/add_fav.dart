@@ -54,7 +54,7 @@ class _AddFavState extends State<AddFav> {
                       const SizedBox(height: 10.0,),
                       Row(
                         children: const [
-                          Text("Add a Title:", style: TextStyle(fontSize: 25.0),),
+                          Text("Add a Title:", style: TextStyle(fontSize: 15.0),),
                           Spacer(),
                         ],
                       ),
@@ -79,7 +79,7 @@ class _AddFavState extends State<AddFav> {
                       const SizedBox(height: 20.0,),
                       Row(
                         children: const [
-                          Text("Your Copied Text:", style: TextStyle(fontSize: 25.0),),
+                          Text("Your Copied Text:", style: TextStyle(fontSize: 15.0),),
                           Spacer(),
                         ],
                       ),
