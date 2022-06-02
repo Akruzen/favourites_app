@@ -4,6 +4,7 @@ import 'package:favourites_app/layouts/edit_card.dart';
 import 'package:favourites_app/layouts/stored_cards.dart';
 import 'package:favourites_app/screens/add_fav.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -31,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   String? _sharedText;
   List<Widget> storedCards = [];
   String data = "Null";
+  static const platform = MethodChannel("channel");
 
   bool _isSnackBarActive = false;
 
@@ -63,19 +65,32 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<String> getNativeIntent () async {
+    try {
+      String receivedIntentString = await platform.invokeMethod("getSharedData");
+      print("Got Intent in Flutter");
+      print("Path received in flutter: $receivedIntentString");
+      return receivedIntentString;
+    } catch (e, s) {
+      print("Error: $e\nError String: $s");
+      return "Null";
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     showCards();
     // For sharing images coming from outside the app while the app is in the memory
     _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
-        .listen((List<SharedMediaFile> value) {
+        .listen((List<SharedMediaFile> value) async {
       _sharedFiles = value;
       String path = _sharedFiles?.map((f) => f.path).join(",") ?? "";
       print("Shared Image in memory: ${_sharedFiles?.map((f) => f.path).join(",") ?? ""}");
       print("Printing to String when app in memory: $path");
       if (value.isNotEmpty) {
-        Route route = MaterialPageRoute(builder: (context) => AddFav(data: path));
+        String actualPath = await getNativeIntent();
+        Route route = MaterialPageRoute(builder: (context) => AddFav(data: actualPath));
         Navigator.pushReplacement(context, route);
       }
     }, onError: (err) {
@@ -83,13 +98,14 @@ class _HomePageState extends State<HomePage> {
     });
 
     // For sharing images coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) async {
       _sharedFiles = value;
       String path = _sharedFiles?.map((f) => f.path).join(",") ?? "";
       print("Shared Image app is closed: ${_sharedFiles?.map((f) => f.path).join(",") ?? ""}");
       print("Printing to String when app closed: $path");
       if (value.isNotEmpty) {
-        Route route = MaterialPageRoute(builder: (context) => AddFav(data: path));
+        String actualPath = await getNativeIntent();
+        Route route = MaterialPageRoute(builder: (context) => AddFav(data: actualPath));
         Navigator.pushReplacement(context, route);
       }
     });
@@ -98,7 +114,7 @@ class _HomePageState extends State<HomePage> {
 
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
     _intentDataStreamSubscription =
-        ReceiveSharingIntent.getTextStream().listen((String value) {
+        ReceiveSharingIntent.getTextStream().listen((String value) async {
           if (value.isNotEmpty && value != "") {
             var now = DateTime.now();
             setState(() {
@@ -108,7 +124,8 @@ class _HomePageState extends State<HomePage> {
             _sharedText = value;
             print("Shared in memory text: $_sharedText");
             print(storedCards.toString());
-            Route route = MaterialPageRoute(builder: (context) => AddFav(data: value));
+            String actualPath = await getNativeIntent();
+            Route route = MaterialPageRoute(builder: (context) => AddFav(data: actualPath));
             Navigator.pushReplacement(context, route);
           }
         }, onError: (err) {
@@ -116,7 +133,7 @@ class _HomePageState extends State<HomePage> {
         });
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialText().then((String? value) {
+    ReceiveSharingIntent.getInitialText().then((String? value) async {
       if (value != null || value != "") {
         var now = DateTime.now();
         setState(() {
@@ -128,7 +145,8 @@ class _HomePageState extends State<HomePage> {
         print(storedCards.toString());
       }
       if (value != null) {
-        Route route = MaterialPageRoute(builder: (context) => AddFav(data: value));
+        String actualPath = await getNativeIntent();
+        Route route = MaterialPageRoute(builder: (context) => AddFav(data: actualPath));
         Navigator.pushReplacement(context, route);
       }
     });

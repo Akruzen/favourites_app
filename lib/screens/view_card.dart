@@ -125,7 +125,10 @@ class _ViewCardState extends State<ViewCard> {
                     children: [
                       Row(
                         children: [
-                          Text(widget.title, style: GoogleFonts.titilliumWeb(textStyle: const TextStyle(color: Colors.black, fontSize: 20.0),)),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width - 75,
+                            child: Text(widget.title, style: GoogleFonts.titilliumWeb(textStyle: const TextStyle(color: Colors.black, fontSize: 20.0),))
+                          ),
                           const Spacer(),
                         ],
                       ),
