@@ -2,7 +2,7 @@
 
 A project developed in Flutter which helps users bookmark their favourite URLs, Images, Videos, Documents, Google Map location, Song, WhatsApp messages or any file or text for that matter in one single app so they won't have to search all the time for their different starred file in different apps they have saved in.
 
-## Screenshots
+![App Logo](https://github.com/Akruzen/favourites_app/tree/master/android/app/src/main/res/mipmap-xxxhdpi.png)
 
 ## Dependencies
 
